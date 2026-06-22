@@ -1,3 +1,5 @@
+#![allow(dead_code)] // SaaS template: WIP request struct field 未使用、将来 handler で使う
+
 use axum::{
     extract::State,
     response::Json,
@@ -206,7 +208,7 @@ async fn battery_predict(
 ) -> Json<BatteryPredictResponse> {
     let t = Instant::now();
     let btype = req.battery_type.unwrap_or_else(|| "li-ion-nmc".into());
-    let capacity = req.capacity_kwh.unwrap_or(100.0);
+    let _capacity = req.capacity_kwh.unwrap_or(100.0);
     let cycles = req.cycles_completed.unwrap_or(500);
     let temp = req.temperature_c.unwrap_or(25.0);
     let degradation = 0.02 + (temp - 25.0).abs() * 0.001;
@@ -242,7 +244,7 @@ async fn demand_forecast(
                 hour: hr,
                 demand_kw: base * factor,
                 temperature_c: 20.0 + 5.0 * ((hr as f64 * std::f64::consts::PI / 12.0).sin()),
-                solar_generation_kw: if hr >= 6 && hr <= 18 {
+                solar_generation_kw: if (6..=18).contains(&hr) {
                     base * 0.2 * ((hr as f64 - 6.0) * std::f64::consts::PI / 12.0).sin()
                 } else {
                     0.0
@@ -274,15 +276,15 @@ async fn optimize(
     let schedule: Vec<ScheduleEntry> = (0..24)
         .map(|h| ScheduleEntry {
             hour: h,
-            action: if h >= 10 && h <= 16 {
+            action: if (10..=16).contains(&h) {
                 "discharge-battery".into()
-            } else if h >= 1 && h <= 5 {
+            } else if (1..=5).contains(&h) {
                 "charge-battery".into()
             } else {
                 "grid-supply".into()
             },
             amount_kw: 1000.0,
-            source: if h >= 10 && h <= 16 {
+            source: if (10..=16).contains(&h) {
                 "solar+battery".into()
             } else {
                 "grid".into()
