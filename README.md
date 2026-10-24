@@ -113,4 +113,6 @@ docker compose up -d
 
 ## License
 
-AGPL-3.0-or-later
+`LicenseRef-Proprietary`. The text is [LICENSE-Proprietary](LICENSE-Proprietary).
+
+Enquiries: https://extoria.co.jp/
