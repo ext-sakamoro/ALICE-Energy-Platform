@@ -128,7 +128,7 @@ export default function LandingPage() {
       </main>
 
       <footer style={{ textAlign: "center", padding: 32, color: "#555", borderTop: "1px solid #ffffff10" }}>
-        ALICE Energy-Platform — AGPL-3.0-or-later
+        ALICE Energy-Platform — LicenseRef-Proprietary
       </footer>
     </div>
   );
